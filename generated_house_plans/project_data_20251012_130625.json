@@ -1,0 +1,21 @@
+{
+  "project_id": "20251012_130625",
+  "analysis": {
+    "house_type": "Single Floor House",
+    "land_cents": 2,
+    "orientation": "West",
+    "rooms": {
+      "Bedrooms": 2,
+      "Bathrooms": 1,
+      "Kitchen": 1,
+      "Hall": 1,
+      "Parking": "1 compact",
+      "Balcony": "Small balcony",
+      "Total Area": "871 sq ft"
+    }
+  },
+  "3d_model": {
+    "success": true,
+    "path": "generated_house_plans\\3d_model_20251012_130625.glb"
+  }
+}

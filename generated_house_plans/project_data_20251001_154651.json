@@ -1,0 +1,21 @@
+{
+  "project_id": "20251001_154651",
+  "analysis": {
+    "house_type": "Villa",
+    "land_cents": 11,
+    "orientation": "South",
+    "rooms": {
+      "Bedrooms": 4,
+      "Bathrooms": 3,
+      "Kitchen": 2,
+      "Hall": 2,
+      "Parking": "2-car garage",
+      "Balcony": "Large balcony + terrace",
+      "Total Area": "4792 sq ft"
+    }
+  },
+  "3d_model": {
+    "success": true,
+    "path": "generated_house_plans\\3d_model_20251001_154651.glb"
+  }
+}

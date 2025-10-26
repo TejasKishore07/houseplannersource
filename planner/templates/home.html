@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart House Planner - AI-Powered House Planning</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #ffffff;
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 { 
+            font-family: 'Poppins', sans-serif; 
+            font-weight: 700;
+        }
+
+        /* Navigation */
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            color: #475569 !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #2563eb !important;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            padding: 140px 0 100px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            animation: fadeInUp 0.8s ease 0.2s;
+            animation-fill-mode: both;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.4s;
+            animation-fill-mode: both;
+        }
+
+        /* Glassmorphism Form Card */
+        .form-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 0.8s ease 0.6s;
+            animation-fill-mode: both;
+        }
+        
+        .form-card h4 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+        }
+        
+        .form-label {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .form-control, .form-check-input {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+        }
+        
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            color: white;
+            box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .form-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.85rem;
+        }
+        
+        /* Custom Orientation Selector */
+        .orientation-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+        
+        .orientation-option {
+            position: relative;
+        }
+        
+        .orientation-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .orientation-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.85rem 1rem;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .orientation-label i {
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .orientation-option input[type="radio"]:checked + .orientation-label {
+            background: rgba(255, 255, 255, 0.35);
+            border-color: white;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+        }
+        
+        .orientation-label:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .form-check-label {
+            color: white;
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+            color: white;
+        }
+        
+        .btn-secondary-custom {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-secondary-custom:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-3px);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 100px 0;
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            height: 100%;
+            border: 1px solid #f1f5f9;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .feature-icon.purple { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); }
+        .feature-icon.green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .feature-icon.orange { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        
+        .feature-card h5 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+        
+        .feature-card p {
+            color: #64748b;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 100px 0;
+            background: white;
+        }
+        
+        .timeline-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .timeline-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .timeline-step:last-child {
+            margin-bottom: 0;
+        }
+        
+        .step-number {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .step-number.blue { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); }
+        .step-number.green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .step-number.orange { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .step-number.pink { background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); }
+        
+        .step-content {
+            margin-left: 2rem;
+            flex: 1;
+        }
+        
+        .step-content h5 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+        
+        .step-content p {
+            color: #64748b;
+            margin: 0;
+            font-size: 1.05rem;
+        }
+
+        /* Sample Plans Section */
+        .sample-plans {
+            padding: 100px 0;
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+        }
+        
+        .plan-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            height: 100%;
+        }
+        
+        .plan-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .plan-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .plan-image-fallback {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .plan-image-fallback::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid2" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid2)"/></svg>');
+            opacity: 0.5;
+        }
+        
+        .plan-card i {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .plan-content {
+            padding: 1.5rem;
+        }
+        
+        .plan-content h6 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+        
+        .plan-stats {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        
+        .plan-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            padding: 100px 0;
+            background: white;
+        }
+        
+        .testimonial-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            color: white;
+            height: 100%;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .testimonial-stars {
+            color: #fbbf24;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .testimonial-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 100px 0;
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+        }
+        
+        .accordion-item {
+            border: none;
+            margin-bottom: 1rem;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .accordion-button {
+            background: white;
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 1.5rem;
+            border: none;
+        }
+        
+        .accordion-button:not(.collapsed) {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+        }
+        
+        .accordion-button:focus {
+            box-shadow: none;
+        }
+        
+        .accordion-body {
+            padding: 1.5rem;
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+        
+        .footer-brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-text {
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-icons a {
+            display: inline-flex;
+            width: 40px;
+            height: 40px;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .social-icons a:hover {
+            background: #2563eb;
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            text-align: center;
+            color: #94a3b8;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .form-card {
+                padding: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .timeline-step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step-content {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+
+            .sample-plans .plan-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    background: #fff;
+    }
+
+    .sample-plans .plan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .sample-plans .plan-image {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    }
+
+    .sample-plans .plan-image i {
+    font-size: 2rem;
+    color: #fff;
+    }
+
+    .sample-plans .plan-content {
+    padding: 16px;
+    text-align: center;
+    }
+
+    .sample-plans .plan-content h6 {
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+    }
+
+    .sample-plans .plan-stats {
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    }
+
+    .sample-plans .plan-price {
+    font-weight: bold;
+    color: #111827;
+    font-size: 1rem;
+}
+
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-home"></i> Smart House Planner
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#samples">Sample Plans</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Build Your Dream Home with AI</h1>
+                        <p class="hero-subtitle">Get instant 3D models, accurate cost estimates, and smart recommendations powered by artificial intelligence. Turn your vision into reality.</p>
+                        <div class="hero-buttons">
+                            <a href="#planningForm" class="btn-primary-custom">
+                                <i class="fas fa-rocket"></i> Start Planning Now
+                            </a>
+                            <a href="#samples" class="btn-secondary-custom">
+                                <i class="fas fa-images"></i> View Sample Plans
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-card" id="planningForm">
+                        <h4><i class="fas fa-drafting-compass"></i> Plan Your Dream House</h4>
+                        <form method="post" action="/result/">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label"><i class="fas fa-ruler"></i> Land Area (Cents)</label>
+                                    <input type="number" class="form-control" id="land_cents" name="land_cents" value="1" min="1" max="50" required>
+                                    <div class="form-text">1 cent = 435.6 sq ft</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label"><i class="fas fa-rupee-sign"></i> Budget (₹)</label>
+                                    <input type="text" class="form-control" id="budget" name="budget" placeholder="e.g., 50,00,000">
+                                    <div class="form-text">Optional - auto estimated</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label"><i class="fas fa-compass"></i> Plot Orientation</label>
+                                <div class="orientation-selector">
+                                    <div class="orientation-option">
+                                        <input type="radio" name="orientation" id="north" value="North" checked>
+                                        <label for="north" class="orientation-label">
+                                            <i class="fas fa-arrow-up"></i> North
+                                        </label>
+                                    </div>
+                                    <div class="orientation-option">
+                                        <input type="radio" name="orientation" id="south" value="South">
+                                        <label for="south" class="orientation-label">
+                                            <i class="fas fa-arrow-down"></i> South
+                                        </label>
+                                    </div>
+                                    <div class="orientation-option">
+                                        <input type="radio" name="orientation" id="east" value="East">
+                                        <label for="east" class="orientation-label">
+                                            <i class="fas fa-arrow-right"></i> East
+                                        </label>
+                                    </div>
+                                    <div class="orientation-option">
+                                        <input type="radio" name="orientation" id="west" value="West">
+                                        <label for="west" class="orientation-label">
+                                            <i class="fas fa-arrow-left"></i> West
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary-custom w-100">
+                                <i class="fas fa-magic"></i> Generate House Plan
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose Smart House Planner?</h2>
+            <p class="section-subtitle">Experience the future of home planning with cutting-edge AI technology</p>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon purple">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h5>AI-Powered Planning</h5>
+                        <p>Our intelligent system analyzes your requirements and generates personalized house plans optimized for your needs, budget, and land specifications.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon green">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <h5>3D Model Generation</h5>
+                        <p>Visualize your dream home with stunning 3D models. Explore every angle and make informed decisions before construction begins.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon orange">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h5>Accurate Cost Estimation</h5>
+                        <p>Get detailed, transparent cost breakdowns for materials and labor. No hidden surprises - know exactly what you're paying for.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Four simple steps to your dream home</p>
+            <div class="timeline-container">
+                <div class="timeline-step">
+                    <div class="step-number blue">1</div>
+                    <div class="step-content">
+                        <h5>Enter Your Details</h5>
+                        <p>Provide your land area, plot orientation, and budget. Our smart form guides you through every step.</p>
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number green">2</div>
+                    <div class="step-content">
+                        <h5>AI Analysis</h5>
+                        <p>Our advanced AI analyzes thousands of design patterns to suggest the best layouts for your specific requirements.</p>
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number orange">3</div>
+                    <div class="step-content">
+                        <h5>3D Generation</h5>
+                        <p>Get realistic 3D models and detailed floor plans generated instantly. See your home before it's built.</p>
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number pink">4</div>
+                    <div class="step-content">
+                        <h5>Get Your Results</h5>
+                        <p>Download comprehensive reports, 3D models, floor plans, and cost estimates. Share with architects or builders.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sample Plans Section -->
+    <section class="sample-plans" id="samples">
+        <div class="container">
+            <h2 class="section-title">Sample House Plans</h2>
+            <p class="section-subtitle">Browse our popular designs for inspiration</p>
+            <div class="row g-4">
+    
+                <!-- Stylish Duplex -->
+                <div class="col-md-3">
+                    <div class="plan-card">
+                        <div class="plan-image" style="
+                            background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c') center/cover no-repeat;
+                            position: relative;
+                        ">
+                            <div class="overlay" style="
+                                position: absolute; inset:0;
+                                background: rgba(0,0,0,0.3);
+                            "></div>
+                            <i class="fas fa-city" style="position: relative; z-index:2; color: white;"></i>
+                        </div>
+                        <div class="plan-content">
+                            <h6>Stylish Duplex</h6>
+                            <div class="plan-stats">2400 sq ft • 3 Beds • 2 Baths</div>
+                            <div class="plan-price">₹78 Lakhs</div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Modern 3BHK -->
+                <div class="col-md-3">
+                    <div class="plan-card">
+                        <div class="plan-image" style="
+                            background: url('https://images.unsplash.com/photo-1572120360610-d971b9d7767c') center/cover no-repeat;
+                            position: relative;
+                        ">
+                            <div class="overlay" style="
+                                position: absolute; inset:0;
+                                background: rgba(0,0,0,0.3);
+                            "></div>
+                            <i class="fas fa-home" style="position: relative; z-index:2; color: white;"></i>
+                        </div>
+                        <div class="plan-content">
+                            <h6>Modern 3BHK</h6>
+                            <div class="plan-stats">1800 sq ft • 3 Beds • 2 Baths</div>
+                            <div class="plan-price">₹45 Lakhs</div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Luxury Villa -->
+                <div class="col-md-3">
+                    <div class="plan-card">
+                        <div class="plan-image" style="
+                            background: url('https://images.unsplash.com/photo-1505691938895-1758d7feb511') center/cover no-repeat;
+                            position: relative;
+                        ">
+                            <div class="overlay" style="
+                                position: absolute; inset:0;
+                                background: rgba(0,0,0,0.3);
+                            "></div>
+                            <i class="fas fa-building" style="position: relative; z-index:2; color: white;"></i>
+                        </div>
+                        <div class="plan-content">
+                            <h6>Luxury Villa</h6>
+                            <div class="plan-stats">3200 sq ft • 4 Beds • 3 Baths</div>
+                            <div class="plan-price">₹1.2 Cr</div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Compact 2BHK -->
+                <div class="col-md-3">
+                    <div class="plan-card">
+                        <div class="plan-image" style="
+                            background: url('https://images.unsplash.com/photo-1580587771525-78b9dba3b914') center/cover no-repeat;
+                            position: relative;
+                        ">
+                            <div class="overlay" style="
+                                position: absolute; inset:0;
+                                background: rgba(0,0,0,0.3);
+                            "></div>
+                            <i class="fas fa-house-user" style="position: relative; z-index:2; color: white;"></i>
+                        </div>
+                        <div class="plan-content">
+                            <h6>Compact 2BHK</h6>
+                            <div class="plan-stats">950 sq ft • 2 Beds • 1 Bath</div>
+                            <div class="plan-price">₹28 Lakhs</div>
+                        </div>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </section>
+    
+
+
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="section-subtitle">Everything you need to know about Smart House Planner</p>
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            How accurate are the cost estimations?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Our AI-powered cost estimations are highly accurate, typically within 5-10% of actual construction costs. We use real-time market data and consider your local area pricing to provide the most reliable estimates.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            Can I download my floor plan and 3D models?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Yes! Once your plan is generated, you can download high-resolution floor plans, 3D models, and detailed cost reports. All files are provided in standard formats that you can share with architects and contractors.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            Do I still need an architect after using this tool?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            While our AI provides professional-grade plans, we recommend consulting with a licensed architect for final structural approval and local building code compliance. Our plans serve as an excellent starting point to save time and money.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                            How long does it take to generate a house plan?
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Our AI generates your complete house plan, including 3D models and cost estimates, in just 2-3 minutes! You'll receive instant results that would typically take days or weeks with traditional methods.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                            Can I modify the generated plan?
+                        </button>
+                    </h2>
+                    <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Absolutely! You can regenerate plans with different parameters or take our base design to your architect for customization. Our plans are designed to be flexible starting points for your dream home.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="footer-brand">
+                        <i class="fas fa-home"></i> Smart House Planner
+                    </div>
+                    <p class="footer-text">
+                        Transforming dreams into reality with AI-powered house planning. Get instant 3D models, accurate costs, and smart recommendations.
+                    </p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-6">
+                            <h6 class="mb-3" style="font-weight: 600;">Quick Links</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><a href="#features" style="color: #94a3b8; text-decoration: none;">Features</a></li>
+                                <li class="mb-2"><a href="#how-it-works" style="color: #94a3b8; text-decoration: none;">How It Works</a></li>
+                                <li class="mb-2"><a href="#samples" style="color: #94a3b8; text-decoration: none;">Sample Plans</a></li>
+                                <li class="mb-2"><a href="#faq" style="color: #94a3b8; text-decoration: none;">FAQ</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <h6 class="mb-3" style="font-weight: 600;">Technologies</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2" style="color: #94a3b8;"><i class="fas fa-robot"></i> AI & Machine Learning</li>
+                                <li class="mb-2" style="color: #94a3b8;"><i class="fas fa-cube"></i> Blender 3D</li>
+                                <li class="mb-2" style="color: #94a3b8;"><i class="fab fa-python"></i> Django Framework</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="mb-0">&copy; 2025 Smart House Planner. All rights reserved. Built with ❤️ for dreamers and builders.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const navHeight = 80;
+                    const targetPosition = target.offsetTop - navHeight;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Budget formatting (Indian numbering system)
+        const budgetInput = document.getElementById('budget');
+        
+        function formatIndian(numStr) {
+            const digits = numStr.replace(/\D/g, '');
+            if (!digits) return '';
+            const lastThree = digits.slice(-3);
+            const other = digits.slice(0, -3);
+            return other.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + (other ? ',' : '') + lastThree;
+        }
+        
+        budgetInput.addEventListener('input', function() {
+            this.value = formatIndian(this.value);
+        });
+
+        // Land area dynamic calculation
+        const landInput = document.getElementById('land_cents');
+        landInput.addEventListener('input', function() {
+            const cents = parseFloat(this.value) || 0;
+            const sqft = Math.round(cents * 435.6);
+            const helpText = this.nextElementSibling;
+            helpText.textContent = `${cents} cents = ${sqft.toLocaleString()} sq ft`;
+        });
+
+        // Navbar scroll effect
+        let lastScroll = 0;
+        const navbar = document.querySelector('.navbar-custom');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.05)';
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Optional: show a brief loading state on submit without blocking POST
+        document.querySelector('form').addEventListener('submit', function() {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            submitBtn.disabled = true;
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all feature cards and timeline steps
+        document.querySelectorAll('.feature-card, .timeline-step, .plan-card, .testimonial-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
+                        

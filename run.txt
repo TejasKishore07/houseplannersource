@@ -1,0 +1,12 @@
+.\venv\Scripts\Activate.ps1
+
+.\venv\Scripts\python.exe -m pip install -r requirements.txt
+$env:GEMINI_API_KEY =  "AIzaSyCEfkVLHLFBoy0RrLA7NM9IYVTYt8xrrww"
+.\venv\Scripts\python.exe manage.py migrate
+.\venv\Scripts\python.exe manage.py runserver
+
+
+
+Open app: http://127.0.0.1:8000
+
+

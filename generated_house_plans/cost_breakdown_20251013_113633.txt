@@ -1,0 +1,30 @@
+Cost Breakdown Report
+
+Assumption: Construction cost = ₹1,800–₹2,500 per sq ft (mid-range), interiors and finishes are medium to premium quality.
+
+Villa
+
+Approx. Area: 5,663 sq ft
+
+Base Construction Cost (₹2,500/sq ft): ₹14,157,500
+
+Interiors & Furnishing: ₹20,00,000 – ₹30,00,000
+
+Electrical & Plumbing: ₹5,00,000 – ₹8,00,000
+
+Parking Provision (2-car garage): ₹3,00,000
+
+Landscaping & Terrace: ₹5,00,000 – ₹7,00,000
+
+Professional Fees, Design & Approvals: ₹3,00,000 – ₹6,00,000
+
+Contingency (8–10%): add as buffer on subtotal
+
+Total Estimated Cost: ₹1,85,00,000 – ₹2,05,00,000 (excl. land, GST)
+
+💡 Cost Summary Table
+House Type	Area (sq ft)	Base Construction	Interiors & Furnishing	Electrical & Plumbing	Parking	Total Cost (₹)
+1BHK	600	10,80,000	1,50,000 – 2,00,000	50,000 – 70,000	50,000	13,30,000 – 14,50,000
+2BHK	1,100	19,80,000	2,50,000 – 3,50,000	70,000 – 1,00,000	1,00,000	24,00,000 – 25,50,000
+3BHK	1,600	32,00,000	4,00,000 – 5,00,000	1,00,000 – 1,50,000	1,50,000	38,50,000 – 40,00,000
+Villa	5,663	14,157,500	20,00,000 – 30,00,000	5,00,000 – 8,00,000	3,00,000	1,85,00,000 – 2,05,00,000
