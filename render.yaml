@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: houseplanner
+    env: python
+    buildCommand: |
+      pip install -r requirements.txt
+    startCommand: gunicorn house.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: house.settings
+      - key: GEMINI_API_KEY
+        sync: false
